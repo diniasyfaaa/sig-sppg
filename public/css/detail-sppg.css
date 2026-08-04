@@ -1,0 +1,326 @@
+/*DETAIL SPPG*/
+
+.container{
+    max-width:1200px;
+}
+
+/*BUTTON KEMBALI*/
+
+.detail-back-wrapper{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:36px;
+}
+
+.back-link{
+    display:inline-block;
+    color:#163250;
+    font-size:16px;
+    font-weight:500;
+    text-decoration:underline;
+    transition:.3s ease;
+}
+
+.back-link:hover{
+    color:#234a73;
+    text-decoration:underline;
+    transform:translateY(-2px);
+}
+
+/*JUDUL*/
+
+.detail-title{
+
+    font-size:34px;
+    font-weight:700;
+    color:#173B63;
+    margin-bottom:10px;
+
+}
+
+.detail-address{
+
+    font-size:16px;
+    color:#64748B;
+    line-height:1.8;
+    margin-bottom:35px;
+
+}
+
+/*INFORMASI*/
+
+.detail-list{
+    margin-top:30px;
+}
+
+.detail-item{
+
+    display:flex;
+    align-items:flex-start;
+    margin-bottom:18px;
+
+}
+
+.detail-label{
+
+    width:220px;
+    min-width:220px;
+    font-weight:600;
+    color:#173B63;
+
+}
+
+.detail-colon{
+
+    width:25px;
+    text-align:center;
+    font-weight:600;
+    color:#173B63;
+
+}
+
+.detail-value{
+
+    flex:1;
+    color:#334155;
+    line-height:1.6;
+
+}
+
+/*STATUS*/
+
+.status-active{
+
+    background:#DCFCE7;
+    color:#15803D;
+    padding:7px 15px;
+    border-radius:30px;
+    font-weight:600;
+    display:inline-block;
+
+}
+
+.status-nonactive{
+
+    background:#FEE2E2;
+    color:#DC2626;
+    padding:7px 15px;
+    border-radius:30px;
+    font-weight:600;
+    display:inline-block;
+
+}
+
+/*JARAK KONTEN HALAMAN USER*/
+
+.user-layout .user-content{
+    padding-top:94px;
+}
+
+.user-layout .user-page-container{
+    width:100%;
+    max-width:1600px;
+    margin-left:auto;
+    margin-right:auto;
+
+    padding-left:40px;
+    padding-right:40px;
+    padding-bottom:56px;
+    box-sizing:border-box;
+}
+
+/* FOTO */
+
+.photo-main{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    border-radius:20px;
+    display: block;
+}
+
+.photo-small{
+    width:100%;
+    height:185px;
+    object-fit:cover;
+    border-radius:18px;
+    display: block;
+}
+
+.photo-placeholder{
+    height:300px;
+    background:#F1F5F9;
+    border-radius:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#64748B;
+}
+
+.photo-small-placeholder{
+    height:185px;
+    background:#F1F5F9;
+    border-radius:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#64748B;
+}
+
+.card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.card-body{
+    padding:28px;
+}
+
+.card h5{
+    font-size:22px;
+    font-weight:700;
+    color:#173B63;
+    margin-bottom:20px;
+}
+
+/*MAP*/
+
+#map{
+    width:100%;
+    height:350px;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+/*BUTTON*/
+
+.btn-primary{
+    border-radius:10px;
+    padding:10px 18px;
+}
+
+.btn-action{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:48px;
+    border-radius:14px;
+    font-weight:600;
+    font-size:15px;
+    text-decoration:none;
+    transition:.3s ease;
+}
+
+.btn-edit{
+    background:#163250;
+    color:#fff;
+    border:2px solid #163250;
+}
+
+.btn-edit:hover{
+    background:#234a73;
+    border-color:#234a73;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+.btn-delete{
+    background:#fff;
+    color:#dc3545;
+    border:2px solid #dc3545;
+}
+
+.btn-delete:hover{
+    background:#dc3545;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+.btn-main{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:#163250;
+    color:#fff;
+    border:2px solid #163250;
+    border-radius:14px;
+    padding:12px 22px;
+    font-weight:600;
+    text-decoration:none;
+    transition:.3s ease;
+}
+
+.btn-main:hover{
+    background:#234a73;
+    border-color:#234a73;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+.btn-main.w-100{
+    width:100%;
+}
+
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media (max-width:991.98px){
+    .user-layout .user-content{
+        padding-top:88px;
+    }
+    .user-layout .user-page-container{
+        padding-left:24px;
+        padding-right:24px;
+    }
+    .detail-back-wrapper{
+        margin-bottom:30px;
+    }
+}
+
+@media (max-width:575.98px){
+    .user-layout .user-content{
+        padding-top:84px;
+    }
+    .user-layout .user-page-container{
+        padding-left:16px;
+        padding-right:16px;
+    }
+}
+
+@media (max-width:991px){
+    .detail-title{
+        font-size:28px;
+    }
+    .detail-item{
+        grid-template-columns:170px 20px 1fr;
+    }
+    .photo-main{
+        margin-top:30px;
+    }
+}
+
+@media (max-width:768px){
+    .detail-item{
+        grid-template-columns:1fr;
+        gap:5px;
+    }
+    .detail-colon{
+        display:none;
+    }
+    .detail-label{
+        margin-top:12px;
+    }
+    .photo-main{
+        height:260px;
+    }
+    .photo-small{
+        height:130px;
+    }
+    .card{
+        margin-top:25px;
+    }
+}
