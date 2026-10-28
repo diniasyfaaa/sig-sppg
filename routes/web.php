@@ -48,13 +48,10 @@ Route::middleware('restrict.kepala')->group(function () {
 */
 
 Route::middleware('guest')->group(function () {
-
     Route::get('/login', [AuthController::class, 'showLogin'])
         ->name('login');
-
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.process');
-
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -138,14 +135,11 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Dashboard
-        |--------------------------------------------------------------------------
-        */
-
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('admin.dashboard');
+
+        Route::get('/peta-sebaran', [PetaSebaranController::class, 'index'])
+            ->name('peta.index');
 
         /*
         |--------------------------------------------------------------------------
@@ -164,24 +158,6 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::post('/permohonan/{id}/reject', [AdminPermohonanController::class, 'reject'])
             ->name('admin.permohonan.reject');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Peta Sebaran
-        |--------------------------------------------------------------------------
-        */
-
-        Route::get('/peta-sebaran', [PetaSebaranController::class, 'index'])
-            ->name('peta.index');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Statistik
-        |--------------------------------------------------------------------------
-        */
-
-        Route::get('/statistik', [DashboardController::class, 'statistik'])
-            ->name('admin.statistik');
 
         /*
         |--------------------------------------------------------------------------
