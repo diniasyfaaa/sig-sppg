@@ -5,7 +5,7 @@
     <div class="hero-caption">
         <h1>
             <span>
-                Sistem Informasi Geografis Monitoring dan Pendataan
+                Sistem Informasi Geografis Data
             </span>
 
             <span>

@@ -18,95 +18,90 @@
     <div class="container-fluid px-4 px-lg-5 py-5">
 
         {{-- =====================================================
-             HEADER
-        ===================================================== --}}
-
-
-        {{-- =====================================================
              RINGKASAN DATA
         ===================================================== --}}
-<div class="user-summary-layout">
+        <div class="user-summary-layout">
 
-    {{-- Card besar: Total Desa --}}
-    <div class="user-summary-main-card">
+            {{-- Card besar: Total Desa --}}
+            <div class="user-summary-main-card">
 
-        <span class="user-summary-label">
-            Total Desa
-        </span>
+                <span class="user-summary-label">
+                    Total Desa
+                </span>
 
-        <div class="user-summary-main-value">
-            <strong>{{ number_format($totalDesa) }}</strong>
-            <small>Desa</small>
-        </div>
+                <div class="user-summary-main-value">
+                    <strong>{{ number_format($totalDesa) }}</strong>
+                    <small>Desa</small>
+                </div>
 
-    </div>
+            </div>
 
 
-    {{-- Empat card kecil --}}
-    <div class="user-summary-small-grid">
+            {{-- Empat card kecil --}}
+            <div class="user-summary-small-grid">
 
-        {{-- Total SPPG --}}
-        <div class="user-summary-small-card">
+                {{-- Total SPPG --}}
+                <div class="user-summary-small-card">
 
-            <span class="user-summary-label">
-                Total SPPG
-            </span>
+                    <span class="user-summary-label">
+                        Total SPPG
+                    </span>
 
-            <div class="user-summary-small-value">
-                <strong>{{ number_format($totalSppg) }}</strong>
-                <small>Unit</small>
+                    <div class="user-summary-small-value">
+                        <strong>{{ number_format($totalSppg) }}</strong>
+                        <small>Unit</small>
+                    </div>
+
+                </div>
+
+
+                {{-- Total Kapasitas --}}
+                <div class="user-summary-small-card">
+
+                    <span class="user-summary-label">
+                        Total Kapasitas
+                    </span>
+
+                    <div class="user-summary-small-value">
+                        <strong>{{ number_format($totalKapasitas) }}</strong>
+                        <small>Porsi/Hari</small>
+                    </div>
+
+                </div>
+
+
+                {{-- Total Sasaran --}}
+                <div class="user-summary-small-card">
+
+                    <span class="user-summary-label">
+                        Total Sasaran
+                    </span>
+
+                    <div class="user-summary-small-value">
+                        <strong>{{ number_format($totalSasaran) }}</strong>
+                        <small>Tempat</small>
+                    </div>
+
+                </div>
+
+
+                {{-- Total Pegawai --}}
+                <div class="user-summary-small-card">
+
+                    <span class="user-summary-label">
+                        Total Pegawai
+                    </span>
+
+                    <div class="user-summary-small-value">
+                        <strong>{{ number_format($totalPegawai) }}</strong>
+                        <small>Jiwa</small>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
-
-
-        {{-- Total Kapasitas --}}
-        <div class="user-summary-small-card">
-
-            <span class="user-summary-label">
-                Total Kapasitas
-            </span>
-
-            <div class="user-summary-small-value">
-                <strong>{{ number_format($totalKapasitas) }}</strong>
-                <small>Porsi/Hari</small>
-            </div>
-
-        </div>
-
-
-        {{-- Total Sasaran --}}
-        <div class="user-summary-small-card">
-
-            <span class="user-summary-label">
-                Total Sasaran
-            </span>
-
-            <div class="user-summary-small-value">
-                <strong>{{ number_format($totalSasaran) }}</strong>
-                <small>Tempat</small>
-            </div>
-
-        </div>
-
-
-        {{-- Total Pegawai --}}
-        <div class="user-summary-small-card">
-
-            <span class="user-summary-label">
-                Total Pegawai
-            </span>
-
-            <div class="user-summary-small-value">
-                <strong>{{ number_format($totalPegawai) }}</strong>
-                <small>Jiwa</small>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 
         {{-- =====================================================
              PETA DAN SPPG TERBARU
@@ -426,8 +421,6 @@
                         </div>
 
                     </div>
-
-                </div>
 
             </div>
 

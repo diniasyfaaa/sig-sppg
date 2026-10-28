@@ -9,23 +9,35 @@ class PetaSebaranController extends Controller
     public function index()
     {
         return view('admin.peta', [
-            'sppg' => $this->getPetaData(false)
+            'sppg' => $this->getPetaData('admin')
         ]);
     }
     public function userIndex()
     {
         return view('user.peta', [
-            'sppg' => $this->getPetaData(true)
+            'sppg' => $this->getPetaData('user')
         ]);
     }
-    private function getPetaData(bool $isUser = false)
+    public function kepalaIndex()
+    {
+        return view('kepala-sppg.peta', [
+            'sppg' => $this->getPetaData('kepala')
+        ]);
+    }
+    private function getPetaData(string $role = 'admin')
     {
         return Sppg::with('desa')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->orderBy('nama_sppg')
             ->get()
-            ->map(function ($item) use ($isUser) {
+            ->map(function ($item) use ($role) {
+                $detailUrl = match ($role) {
+                    'user' => route('user.sppg.show', $item->id),
+                    'kepala' => route('kepala.sppg.show', $item->id),
+                    default => route('sppg.show', $item->id),
+                };
+
                 return [
                     'id' => $item->id,
                     'nama_sppg' => $item->nama_sppg,
@@ -36,9 +48,7 @@ class PetaSebaranController extends Controller
                     'latitude' => (float) $item->latitude,
                     'longitude' => (float) $item->longitude,
                     'nama_desa' => optional($item->desa)->nama_desa ?? '-',
-                    'detail_url' => $isUser
-                        ? route('user.sppg.show', $item->id)
-                        : route('sppg.show', $item->id),
+                    'detail_url' => $detailUrl,
                 ];
             })
             ->values();

@@ -137,6 +137,9 @@ class DashboardController extends Controller
 
                     'tanggal_peresmian' =>
                         $item->tanggal_peresmian,
+
+                    'status' =>
+                        $item->status ?? 'Aktif',
                 ];
             })
             ->values();

@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const chartCanvas = document.getElementById('chartUtama');
     const chartContainer = document.querySelector('.chart-container');
     const emptyChart = document.getElementById('emptyChart');
+    const infoNoChart = document.getElementById('infoNoChart');
+    const infoNoChartDesc = document.getElementById('infoNoChartDesc');
+    const chartToolbar = document.getElementById('chartToolbar');
+    const chartCard = document.querySelector('.chart-card');
+    const chartTypeWrapper = document.querySelector('.chart-type');
 
     const judulGrafik = document.getElementById('judulGrafik');
     const subjudulGrafik = document.getElementById('subjudulGrafik');
@@ -127,11 +132,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentValue = urutanDataSelect.value;
         const isPeresmian =
             analisisSelect.value === 'peresmian';
+        const isSingleVillageJumlahSppg =
+            desaSelect.value !== 'all' &&
+            analisisSelect.value === 'jumlah_sppg';
 
         if (isPeresmian) {
             urutanDataSelect.innerHTML = `
                 <option value="desc">Terbaru</option>
                 <option value="asc">Terlama</option>
+            `;
+        } else if (isSingleVillageJumlahSppg) {
+            urutanDataSelect.innerHTML = `
+                <option value="asc">Nama A - Z</option>
+                <option value="desc">Nama Z - A</option>
             `;
         } else {
             urutanDataSelect.innerHTML = `
@@ -189,6 +202,16 @@ document.addEventListener('DOMContentLoaded', function () {
     */
     function getAllVillageData(analysis) {
         const grouped = {};
+
+        if (Array.isArray(window.desaData)) {
+            window.desaData.forEach(function (d) {
+                grouped[d.nama_desa] = {
+                    jumlah_sppg: 0,
+                    kapasitas: 0,
+                    pegawai: 0
+                };
+            });
+        }
 
         sppgData.forEach(function (item) {
             const villageName =
@@ -417,13 +440,20 @@ document.addEventListener('DOMContentLoaded', function () {
     ) {
         tableBody.innerHTML = '';
 
+        const isSingleVillageJumlahSppg =
+            !allVillages &&
+            analisisSelect.value === 'jumlah_sppg';
+
         tableNameHeading.textContent =
             allVillages ? 'Nama Desa' : 'Nama SPPG';
 
-        tableValueHeading.textContent = 'Nilai';
+        tableValueHeading.textContent =
+            isSingleVillageJumlahSppg ? 'Keterangan' : 'Nilai';
 
         tableDescription.textContent =
-            'Rincian data yang ditampilkan pada grafik';
+            isSingleVillageJumlahSppg
+                ? 'Daftar SPPG yang terdaftar pada desa terpilih'
+                : 'Rincian data yang ditampilkan pada grafik';
 
         if (labels.length === 0) {
             tableBody.innerHTML = `
@@ -447,6 +477,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const row = document.createElement('tr');
 
+            const valueHtml = isSingleVillageJumlahSppg
+                ? `<span>1</span> <span class="table-unit">Unit SPPG</span>`
+                : `<span>${formatNumber(value)}</span> <span class="table-unit">${information.unit}</span>`;
+
             row.innerHTML = `
                 <td>${index + 1}</td>
 
@@ -455,13 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </td>
 
                 <td>
-                    <strong>
-                        ${formatNumber(value)}
-                    </strong>
-
-                    <span class="table-unit">
-                        ${information.unit}
-                    </span>
+                    ${valueHtml}
                 </td>
             `;
 
@@ -518,9 +546,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${index + 1}</td>
 
                 <td>
-                    <strong>
+                    <span>
                         ${escapeHtml(item.nama_sppg)}
-                    </strong>
+                    </span>
 
                     <div class="small text-muted mt-1">
                         <i class="bi bi-geo-alt me-1"></i>
@@ -905,18 +933,33 @@ document.addEventListener('DOMContentLoaded', function () {
             chartUtama = null;
         }
 
-        if (selectedAnalysis === 'peresmian') {
-            let statisticData =
-            getPeresmianData(
-                selectedVillage,
-                selectedOrder
-            );
+        if (infoNoChart) {
+            infoNoChart.classList.add('d-none');
+        }
 
-        statisticData =
-            limitStatisticData(
-                statisticData,
-                selectedLimit
-            );
+        if (chartCard) {
+            chartCard.classList.remove('d-none');
+        }
+
+        if (chartTypeWrapper) {
+            chartTypeWrapper.classList.remove('d-none');
+        }
+
+        // KASUS 1: Analisis PERESMIAN
+        if (selectedAnalysis === 'peresmian') {
+            if (chartToolbar) chartToolbar.classList.remove('d-none');
+
+            let statisticData =
+                getPeresmianData(
+                    selectedVillage,
+                    selectedOrder
+                );
+
+            statisticData =
+                limitStatisticData(
+                    statisticData,
+                    selectedLimit
+                );
 
             updatePeresmianTable(
                 statisticData.rows,
@@ -937,6 +980,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
             return;
         }
+
+        // KASUS 2: JUMLAH SPPG DI SATU DESA TERTENTU
+        // (Setiap SPPG bernilai 1 unit sehingga grafik perbandingan tidak diperlukan, langsung tampilkan data statistik)
+        if (!allVillages && selectedAnalysis === 'jumlah_sppg') {
+            const filteredSppg = getFilteredSppg();
+
+            if (chartToolbar) chartToolbar.classList.remove('d-none');
+            if (chartTypeWrapper) chartTypeWrapper.classList.add('d-none');
+            if (chartCard) chartCard.classList.add('d-none');
+
+            if (filteredSppg.length === 0) {
+                updateNormalTable([], [], information, allVillages);
+                return;
+            }
+
+            let combinedData = filteredSppg.map(function (item) {
+                return {
+                    label: item.nama_sppg,
+                    value: 1
+                };
+            });
+
+            // Urutkan berdasarkan nama
+            combinedData.sort(function (a, b) {
+                return selectedOrder === 'desc'
+                    ? b.label.localeCompare(a.label, 'id')
+                    : a.label.localeCompare(b.label, 'id');
+            });
+
+            if (selectedLimit !== null) {
+                combinedData = combinedData.slice(0, selectedLimit);
+            }
+
+            const statisticData = {
+                labels: combinedData.map(item => item.label),
+                values: combinedData.map(item => item.value)
+            };
+
+            updateNormalTable(
+                statisticData.labels,
+                statisticData.values,
+                information,
+                allVillages
+            );
+
+            return;
+        }
+
+        // KASUS 3: SEMUA DESA (atau SATU DESA untuk analisis Kapasitas / Pegawai)
+        if (chartToolbar) chartToolbar.classList.remove('d-none');
 
         let statisticData = allVillages
             ? getAllVillageData(selectedAnalysis)
@@ -1003,6 +1096,8 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
     desaSelect.addEventListener('change', function () {
+        updateUrutanOptions();
+        updateChartButtons();
         renderChart();
     });
 
@@ -1042,6 +1137,23 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
         });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event tombol analisis cepat (quick analysis)
+    |--------------------------------------------------------------------------
+    */
+    document.querySelectorAll('.quick-analysis-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const targetAnalysis = this.dataset.analysis;
+            if (targetAnalysis && analisisSelect) {
+                analisisSelect.value = targetAnalysis;
+                updateUrutanOptions();
+                updateChartButtons();
+                renderChart();
+            }
+        });
+    });
 
     /*
     |--------------------------------------------------------------------------

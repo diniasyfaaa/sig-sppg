@@ -8,6 +8,9 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check()) {
+            if (Auth::user()->isKepalaSppg()) {
+                return redirect()->route('kepala.dashboard');
+            }
             return redirect()->route('admin.dashboard');
         }
 
@@ -32,6 +35,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
+            if (Auth::user()->isKepalaSppg()) {
+                return redirect()
+                    ->route('kepala.dashboard')
+                    ->with('success', 'Selamat datang, ' . Auth::user()->name);
+            }
 
             return redirect()
                 ->route('admin.dashboard')

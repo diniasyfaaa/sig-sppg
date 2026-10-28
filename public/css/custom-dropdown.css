@@ -1,0 +1,493 @@
+/* ==========================================================================
+   SIG SPPG - Unified Modern Dropdown System
+   Matches Profile Dropdown aesthetic across Admin, User, and Kepala SPPG
+   ========================================================================== */
+
+/* Hidden native select for form serialization */
+.custom-select-native-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Container Wrapper */
+.custom-dropdown-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.custom-dropdown-wrapper.inline {
+    display: inline-block;
+    width: auto;
+}
+
+/* Trigger Button */
+.custom-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 46px;
+    height: 46px;
+    padding: 0 16px;
+    background-color: #ffffff;
+    border: 1px solid #d7dde5;
+    border-radius: 12px;
+    color: #344054;
+    font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: normal;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 1px 4px rgba(18, 57, 87, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    user-select: none;
+}
+
+.custom-dropdown-trigger:hover:not(:disabled) {
+    border-color: #123957;
+    background-color: #f8fafc;
+    box-shadow: 0 4px 14px rgba(18, 57, 87, 0.1);
+    transform: translateY(-1px);
+}
+
+.custom-dropdown-trigger:hover:not(:disabled) .custom-dropdown-chevron {
+    color: #123957;
+}
+
+.custom-dropdown-wrapper.open .custom-dropdown-trigger,
+.custom-dropdown-trigger:focus-visible {
+    border-color: #123957;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(18, 57, 87, 0.12);
+}
+
+.custom-dropdown-trigger:disabled {
+    background-color: #f2f4f7;
+    color: #98a2b3;
+    border-color: #e4e7ec;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Trigger Content Inner */
+.custom-dropdown-trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+}
+
+.custom-dropdown-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #123957;
+    flex-shrink: 0;
+}
+
+.custom-dropdown-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #123957;
+    font-weight: 600;
+    font-size: 14.5px;
+}
+
+/* Trigger Chevron */
+.custom-dropdown-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    font-size: 13px;
+    color: #64748b;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+}
+
+.custom-dropdown-wrapper.open .custom-dropdown-chevron {
+    transform: rotate(180deg);
+    color: #123957;
+}
+
+/* Dropdown Menu (Floating Card matching profile dropdown) */
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 1060;
+    display: none;
+    min-width: 220px;
+    width: 100%;
+    max-width: 380px;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 12px 30px rgba(18, 57, 87, 0.14), 0 4px 12px rgba(0, 0, 0, 0.03);
+    outline: none;
+}
+
+/* Dropup orientation */
+.custom-dropdown-wrapper.dropup .custom-dropdown-menu {
+    top: auto;
+    bottom: calc(100% + 8px);
+}
+
+.custom-dropdown-wrapper.open .custom-dropdown-menu {
+    display: block;
+    animation: customDropdownAnim 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes customDropdownAnim {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.custom-dropdown-wrapper.dropup.open .custom-dropdown-menu {
+    animation: customDropdownAnimDropup 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes customDropdownAnimDropup {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dropdown Header */
+.custom-dropdown-header {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px 6px;
+}
+
+.custom-dropdown-header strong {
+    color: #123957;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.custom-dropdown-header small {
+    color: #6c757d;
+    font-size: 11.5px;
+    margin-top: 2px;
+}
+
+/* Dropdown Divider */
+.custom-dropdown-divider {
+    margin: 6px 0;
+    border: none;
+    border-top: 1px solid #e9ecef;
+    opacity: 1;
+}
+
+/* Search Box Container */
+.custom-dropdown-search-box {
+    position: relative;
+    padding: 2px 4px 8px 4px;
+}
+
+.custom-dropdown-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 44%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.custom-dropdown-search-input {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px 0 32px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.custom-dropdown-search-input:focus {
+    background-color: #ffffff;
+    border-color: #123957;
+    box-shadow: 0 0 0 3px rgba(18, 57, 87, 0.1);
+}
+
+.custom-dropdown-search-input::placeholder {
+    color: #94a3b8;
+}
+
+/* Options Container with modern scrollbar */
+.custom-dropdown-options {
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 2px;
+}
+
+.custom-dropdown-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Dropdown Option Item */
+.custom-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    margin-bottom: 2px;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    user-select: none;
+    background: transparent;
+    border: none;
+    text-align: left;
+}
+
+.custom-dropdown-item:last-child {
+    margin-bottom: 0;
+}
+
+.custom-dropdown-item i.item-icon {
+    font-size: 16px;
+    color: #64748b;
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+}
+
+.custom-dropdown-item .item-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.custom-dropdown-item .item-check {
+    display: none;
+    font-size: 15px;
+    color: #123957;
+    margin-left: auto;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+.custom-dropdown-item:hover:not(.disabled) {
+    background-color: #123957;
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.custom-dropdown-item:hover:not(.disabled) i.item-icon,
+.custom-dropdown-item:hover:not(.disabled) .item-check {
+    color: #ffffff;
+}
+
+.custom-dropdown-item.active {
+    background-color: #e2e8f0;
+    color: #0f2d49;
+    font-weight: 600;
+}
+
+.custom-dropdown-item.active i.item-icon {
+    color: #0f2d49;
+}
+
+.custom-dropdown-item.active .item-check {
+    display: inline-block;
+}
+
+.custom-dropdown-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Context Specific Rules
+   ========================================================================== */
+
+/* 1. Filter Desa in Data SPPG Toolbar (Admin & User) */
+.filter-wrapper .custom-dropdown-wrapper {
+    width: 210px;
+    min-width: 190px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .filter-wrapper .custom-dropdown-wrapper {
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
+/* 2. Chart limit select in Statistik */
+.chart-limit-wrapper .custom-dropdown-wrapper {
+    width: 170px;
+}
+
+.chart-limit-wrapper .custom-dropdown-trigger {
+    min-height: 48px;
+    height: 48px;
+}
+
+/* 3. Bootstrap global dropdown-menu styling */
+.dropdown-menu {
+    border-radius: 16px !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 12px 30px rgba(18, 57, 87, 0.14) !important;
+    padding: 10px !important;
+}
+
+.dropdown-menu .dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 9px 12px !important;
+    border-radius: 8px !important;
+    color: #334155 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.dropdown-menu .dropdown-item i {
+    font-size: 16px !important;
+    color: #64748b !important;
+    transition: color 0.15s ease !important;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #f1f5f9 !important;
+    color: #0f2d49 !important;
+}
+
+.dropdown-menu .dropdown-item:hover i,
+.dropdown-menu .dropdown-item:focus i {
+    color: #0f2d49 !important;
+}
+
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active {
+    background-color: #e2e8f0 !important;
+    color: #0f2d49 !important;
+    font-weight: 600 !important;
+}
+
+.dropdown-menu .dropdown-item.active i,
+.dropdown-menu .dropdown-item:active i {
+    color: #0f2d49 !important;
+}
+
+.dropdown-menu .dropdown-divider {
+    margin: 6px 0 !important;
+    border-top: 1px solid #e9ecef !important;
+    opacity: 1 !important;
+}
+
+/* ==========================================================================
+   Auto-Dismiss Alert Countdown Progress Bar System
+   ========================================================================== */
+
+.alert {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Hide Close (X) button */
+.alert .btn-close,
+.alert button.btn-close,
+.alert [data-bs-dismiss="alert"] {
+    display: none !important;
+}
+
+/* Progress bar container */
+.alert-progress-bar-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* Progress bar filling indicator */
+.alert-progress-bar-fill {
+    height: 100%;
+    width: 100%;
+    background-color: currentColor;
+    opacity: 0.65;
+    transition: width 0.05s linear;
+}
+
+.alert-success .alert-progress-bar-fill {
+    background-color: #198754 !important;
+}
+
+.alert-danger .alert-progress-bar-fill {
+    background-color: #dc3545 !important;
+}
+
+.alert-warning .alert-progress-bar-fill {
+    background-color: #ffc107 !important;
+}
+
+.alert-info .alert-progress-bar-fill {
+    background-color: #0dcaf0 !important;
+}
+

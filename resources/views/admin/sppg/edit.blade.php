@@ -12,8 +12,8 @@
 <div class="text-end mb-0">
 
     <a href="javascript:history.back()" class="back-link">
-    Kembali
-</a>
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
 
@@ -50,7 +50,7 @@
             <div class="col-md-6 mb-3">
                 <label>Desa</label>
 
-                <select name="desa_id" class="form-control" required>
+                <select name="desa_id" class="form-select" required>
 
                     @foreach($desa as $d)
 
@@ -90,7 +90,7 @@
             <div class="col-md-6 mb-3">
                 <label>Status</label>
 
-                <select name="status" class="form-control">
+                <select name="status" class="form-select">
 
                     <option value="Aktif"
                         {{ $sppg->status == 'Aktif' ? 'selected' : '' }}>

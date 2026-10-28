@@ -20,6 +20,7 @@
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-dropdown.css') }}">
     @yield('styles')
 
 </head>
@@ -65,29 +66,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 320);
         });
     }
-
-    if (profileButton && profileDropdown) {
-        profileButton.addEventListener('click', function (event) {
-            event.stopPropagation();
-
-            profileButton.classList.toggle('active');
-            profileDropdown.classList.toggle('show');
-        });
-
-        document.addEventListener('click', function (event) {
-            if (
-                !profileButton.contains(event.target) &&
-                !profileDropdown.contains(event.target)
-            ) {
-                profileButton.classList.remove('active');
-                profileDropdown.classList.remove('show');
-            }
-        });
-    }
 });
 </script>
 
-        @yield('scripts')
+        <script src="{{ asset('js/custom-dropdown.js') }}"></script>
+    @yield('scripts')
 
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 

@@ -15,23 +15,57 @@ class SppgController extends Controller
         if (!$url) {
             return [null, null];
         }
+
+        $url = trim($url);
+
+        // Jika URL berupa short link (maps.app.goo.gl / goo.gl/maps), ikuti redirect HTTP untuk mendapatkan URL lengkap
+        if (str_contains($url, 'maps.app.goo.gl') || str_contains($url, 'goo.gl/maps') || str_contains($url, 'page.link')) {
+            try {
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_NOBODY, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+                curl_exec($ch);
+                $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+                curl_close($ch);
+
+                if ($effectiveUrl) {
+                    $url = $effectiveUrl;
+                }
+            } catch (\Throwable $e) {
+                // Ignore curl error if offline, fallback to original url
+            }
+        }
+
+        // Pattern 1: @latitude,longitude
         if (preg_match('/@(-?\d+\.\d+),(-?\d+\.\d+)/', $url, $match)) {
             return [$match[1], $match[2]];
         }
-        if (preg_match('/q=(-?\d+\.\d+),(-?\d+\.\d+)/', $url, $match)) {
+
+        // Pattern 2: ?q=latitude,longitude atau &q=latitude,longitude
+        if (preg_match('/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/', $url, $match)) {
             return [$match[1], $match[2]];
         }
+
+        // Pattern 3: !3dlatitude!4dlongitude (dari format embed / place)
         if (preg_match('/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/', $url, $match)) {
             return [$match[1], $match[2]];
         }
+
+        // Pattern 4: center=latitude,longitude atau ll=latitude,longitude
+        if (preg_match('/(center|ll)=(-?\d+\.\d+),(-?\d+\.\d+)/', $url, $match)) {
+            return [$match[2], $match[3]];
+        }
+
         return [null, null];
     }
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-
     public function index(Request $request)
     {
         $desa = Desa::orderBy('nama_desa')->get();
@@ -81,6 +115,12 @@ class SppgController extends Controller
             'desa'
         ));
     }
+
+    /**
+     * Display a listing of user resources.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function userIndex(Request $request)
     {
         $desa = Desa::orderBy('nama_desa')->get();
@@ -133,7 +173,7 @@ class SppgController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -145,7 +185,7 @@ class SppgController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -199,36 +239,79 @@ class SppgController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
         $sppg = Sppg::with([
             'desa',
-            'sasaran'
+            'sasaran',
+            'menuHarian' => function ($query) {
+                $query->where('status', 'disetujui')
+                      ->orderBy('siklus_ke')
+                      ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')");
+            }
         ])->findOrFail($id);
 
-        return view('admin.sppg.show', compact('sppg'));
+        $menuHarianGrouped = $sppg->menuHarian->groupBy('siklus_ke');
+
+        return view('admin.sppg.show', compact('sppg', 'menuHarianGrouped'));
     }
 
+    /**
+     * Display the specified user resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\View\View
+     */
     public function userShow($id)
     {
         $sppg = Sppg::with([
             'desa',
-            'sasaran'
+            'sasaran',
+            'menuHarian' => function ($query) {
+                $query->where('status', 'disetujui')
+                      ->orderBy('siklus_ke')
+                      ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')");
+            }
         ])->findOrFail($id);
+
+        $menuHarianGrouped = $sppg->menuHarian->groupBy('siklus_ke');
 
         return view(
             'user.sppg.show',
-            compact('sppg')
+            compact('sppg', 'menuHarianGrouped')
         );
+    }
+
+    /**
+     * Display the specified resource for Kepala SPPG.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function kepalaShow($id)
+    {
+        $sppg = Sppg::with([
+            'desa',
+            'sasaran',
+            'menuHarian' => function ($query) {
+                $query->where('status', 'disetujui')
+                      ->orderBy('siklus_ke')
+                      ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')");
+            }
+        ])->findOrFail($id);
+
+        $menuHarianGrouped = $sppg->menuHarian->groupBy('siklus_ke');
+
+        return view('kepala-sppg.sppg.show', compact('sppg', 'menuHarianGrouped'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
@@ -242,7 +325,7 @@ class SppgController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -329,33 +412,33 @@ class SppgController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
-{
-    $sppg = Sppg::findOrFail($id);
+    {
+        $sppg = Sppg::findOrFail($id);
 
-    // Hapus semua data sasaran yang terkait
-    $sppg->sasaran()->delete();
+        // Hapus semua data sasaran yang terkait
+        $sppg->sasaran()->delete();
 
-    // Hapus file foto dari storage
-    if ($sppg->foto_depan) {
-        Storage::disk('public')->delete($sppg->foto_depan);
+        // Hapus file foto dari storage
+        if ($sppg->foto_depan) {
+            Storage::disk('public')->delete($sppg->foto_depan);
+        }
+
+        if ($sppg->foto_dapur) {
+            Storage::disk('public')->delete($sppg->foto_dapur);
+        }
+
+        if ($sppg->foto_belakang) {
+            Storage::disk('public')->delete($sppg->foto_belakang);
+        }
+
+        // Hapus data SPPG
+        $sppg->delete();
+
+        return redirect()
+            ->route('sppg.index')
+            ->with('success', 'Data SPPG beserta seluruh data sasarannya berhasil dihapus.');
     }
-
-    if ($sppg->foto_dapur) {
-        Storage::disk('public')->delete($sppg->foto_dapur);
-    }
-
-    if ($sppg->foto_belakang) {
-        Storage::disk('public')->delete($sppg->foto_belakang);
-    }
-
-    // Hapus data SPPG
-    $sppg->delete();
-
-    return redirect()
-        ->route('sppg.index')
-        ->with('success', 'Data SPPG beserta seluruh data sasarannya berhasil dihapus.');
-}
 }

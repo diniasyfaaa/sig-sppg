@@ -99,6 +99,7 @@
             <thead>
                 <tr>
                     <th width="60">No</th>
+                    <th width="140">Kode SPPG</th>
                     <th>Nama SPPG</th>
                     <th>Desa</th>
                     <th width="130">Status</th>
@@ -110,6 +111,9 @@
                 @forelse($sppg as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
+                        <td>
+                            {{ $item->kode ?? '-' }}
+                        </td>
 
                         <td>
                             <span class="sppg-name">
@@ -123,11 +127,11 @@
 
                         <td>
                             @if($item->status === 'Aktif')
-                                <span class="badge bg-success">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle fw-normal px-2.5 py-1">
                                     Aktif
                                 </span>
                             @else
-                                <span class="badge bg-danger">
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-normal px-2.5 py-1">
                                     Tidak Aktif
                                 </span>
                             @endif
@@ -137,7 +141,7 @@
                             <div class="action-buttons">
                                 <a
                                     href="{{ route('user.sppg.show', $item->id) }}"
-                                    class="btn btn-info btn-sm"
+                                    class="btn btn-sm btn-primary rounded-2 px-3 py-1 fw-normal"
                                 >
                                     Detail
                                 </a>
@@ -146,7 +150,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="empty-state">
                                 <i class="bi bi-search"></i>
 

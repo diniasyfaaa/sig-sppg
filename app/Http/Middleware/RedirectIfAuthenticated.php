@@ -23,6 +23,9 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                if (Auth::user()->isKepalaSppg()) {
+                    return redirect()->route('kepala.dashboard');
+                }
                 return redirect()->route('admin.dashboard');
             }
         }

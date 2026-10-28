@@ -157,7 +157,7 @@
                 class="login-back"
             >
                 <i class="bi bi-arrow-left"></i>
-                Kembali ke halaman utama
+                Kembali
             </a>
 
         </div>

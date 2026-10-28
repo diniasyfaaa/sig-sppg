@@ -197,41 +197,51 @@ drawSummaryCard(
 
 y += 35;
 
-pdf.setFont("helvetica", "bold");
-pdf.setFontSize(13);
-pdf.setTextColor(18,57,87);
+const chartContainer = document.querySelector('.chart-container');
+const chartCard = document.querySelector('.chart-card');
+const isChartVisible = chartContainer &&
+                       !chartContainer.classList.contains('d-none') &&
+                       (chartCard ? !chartCard.classList.contains('d-none') : true);
 
-pdf.text(
-    "GRAFIK STATISTIK",
-    20,
-    y
-);
+if (isChartVisible) {
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(13);
+    pdf.setTextColor(18,57,87);
 
-y += 8;
-
-const canvas =
-    document.getElementById("chartUtama");
-
-if (canvas) {
-
-    const chartImage =
-        canvas.toDataURL(
-            "image/png",
-            1.0
-        );
-
-    pdf.addImage(
-        chartImage,
-        "PNG",
+    pdf.text(
+        "GRAFIK STATISTIK",
         20,
-        y,
-        170,
-        55
+        y
     );
 
-}
+    y += 8;
 
-y += 65;
+    const canvas =
+        document.getElementById("chartUtama");
+
+    if (canvas) {
+        try {
+            const chartImage =
+                canvas.toDataURL(
+                    "image/png",
+                    1.0
+                );
+
+            pdf.addImage(
+                chartImage,
+                "PNG",
+                20,
+                y,
+                170,
+                55
+            );
+
+            y += 65;
+        } catch (e) {
+            console.error("Gagal mengekspor grafik ke PDF:", e);
+        }
+    }
+}
 
 pdf.setFont("helvetica", "bold");
 pdf.setFontSize(13);

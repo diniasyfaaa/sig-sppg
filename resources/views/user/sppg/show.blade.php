@@ -12,9 +12,9 @@
 <div class="user-page-container user-detail-sppg">
 <div class="text-end mb-5">
 
-    <a href="javascript:history.back()" class="back-link" >
-    Kembali
-</a>
+    <a href="javascript:history.back()" class="back-link">
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
 
@@ -262,4 +262,105 @@
 </div>
 </div>
 </div>
+
+    {{-- =========================
+         TABEL MENU HARIAN (SIKLUS MENU MAKANAN)
+    ========================== --}}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card menu-harian-card shadow border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h3 class="menu-harian-title">
+                        Menu Harian
+                    </h3>
+
+                    @if(!isset($menuHarianGrouped) || $menuHarianGrouped->isEmpty())
+                        <div class="alert alert-light border text-center py-4 rounded-3">
+                            <i class="bi bi-info-circle text-muted fs-4 d-block mb-2"></i>
+                            <span class="text-secondary">Belum ada data menu harian yang dipublikasikan untuk unit SPPG ini.</span>
+                        </div>
+                    @else
+                        @php
+                            $daysOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                            $hasMinggu = false;
+                            foreach($menuHarianGrouped as $items) {
+                                if($items->where('hari', 'Minggu')->count() > 0) {
+                                    $hasMinggu = true;
+                                    break;
+                                }
+                            }
+                            if($hasMinggu) {
+                                $daysOrder[] = 'Minggu';
+                            }
+                        @endphp
+
+                        @foreach($menuHarianGrouped as $siklusKe => $items)
+                            <div class="menu-siklus-block">
+                                <div class="menu-siklus-header">
+                                    Minggu ke-{{ $siklusKe }}
+                                </div>
+                                <div class="menu-table-wrapper">
+                                    <table class="menu-grid-table">
+                                        <thead>
+                                            <tr>
+                                                @foreach($daysOrder as $dayName)
+                                                    <th style="width: {{ 100 / count($daysOrder) }}%;">{{ $dayName }}</th>
+                                                @endforeach
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                @foreach($daysOrder as $dayName)
+                                                    @php
+                                                        $menu = $items->firstWhere('hari', $dayName);
+                                                    @endphp
+                                                    <td>
+                                                        <div class="menu-day-col">
+                                                            <div class="menu-img-box">
+                                                                @if($menu && $menu->foto)
+                                                                    <a href="{{ asset('storage/' . $menu->foto) }}" target="_blank" class="w-100 h-100 d-block">
+                                                                        <img src="{{ asset('storage/' . $menu->foto) }}" alt="Foto {{ $menu->menu_makanan }}">
+                                                                    </a>
+                                                                @elseif($menu)
+                                                                    <div class="menu-img-placeholder">
+                                                                        <i class="bi bi-card-image fs-3 mb-1"></i>
+                                                                        <span>Foto Menu</span>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="menu-img-placeholder">
+                                                                        <i class="bi bi-slash-circle fs-4 mb-1"></i>
+                                                                        <span>Tidak Ada</span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+
+                                                            <div class="menu-desc-text">
+                                                                @if($menu && $menu->menu_makanan)
+                                                                    {{ $menu->menu_makanan }}
+                                                                @else
+                                                                    <span class="text-muted italic">-</span>
+                                                                @endif
+                                                            </div>
+
+                                                            <div class="menu-gizi-text">
+                                                                @if($menu && $menu->standar_gizi)
+                                                                    {!! nl2br(e($menu->standar_gizi)) !!}
+                                                                @else
+                                                                    <span class="text-muted">-</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

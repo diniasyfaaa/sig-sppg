@@ -11,7 +11,7 @@
     {{-- Header --}}
     <div class="dashboard-header">
         <div class="header-left">
-            <h2>Statistik Monitoring</h2>
+            <h2>Statistik</h2>
             <p>Analisis Data SPPG Kecamatan Cileunyi</p>
         </div>
     </div>
@@ -68,7 +68,7 @@
                     <option value="all">Semua Desa</option>
 
                     @foreach($desa as $item)
-                        <option value="{{ $item->id }}">
+                        <option value="{{ $item->id }}" {{ request('desa') == $item->id ? 'selected' : '' }}>
                             {{ $item->nama_desa }}
                         </option>
                     @endforeach
@@ -83,23 +83,19 @@
 
                 <select class="form-select" id="analisis">
 
-                    <option value="jumlah_sppg"
-                        {{ request('analisis') === 'jumlah_sppg' ? 'selected' : '' }}>
+                    <option value="jumlah_sppg" {{ request('analisis') === 'jumlah_sppg' ? 'selected' : '' }}>
                         Jumlah SPPG
                     </option>
 
-                    <option value="peresmian"
-                        {{ request('analisis') === 'peresmian' ? 'selected' : '' }}>
+                    <option value="peresmian" {{ request('analisis') === 'peresmian' ? 'selected' : '' }}>
                         Peresmian
                     </option>
 
-                    <option value="kapasitas"
-                        {{ request('analisis') === 'kapasitas' ? 'selected' : '' }}>
+                    <option value="kapasitas" {{ request('analisis') === 'kapasitas' ? 'selected' : '' }}>
                         Kapasitas Produksi
                     </option>
 
-                    <option value="pegawai"
-                        {{ request('analisis') === 'pegawai' ? 'selected' : '' }}>
+                    <option value="pegawai" {{ request('analisis') === 'pegawai' ? 'selected' : '' }}>
                         Jumlah Pegawai
                     </option>
 
@@ -120,67 +116,45 @@
         </div>
     </div>
 
-{{-- Toolbar Grafik --}}
-<div class="chart-toolbar mt-4">
+    {{-- Toolbar Grafik --}}
+    <div class="chart-toolbar mt-4" id="chartToolbar">
 
-    <div class="chart-type">
+        <div class="chart-type">
 
-        <button
-            type="button"
-            class="chart-btn active"
-            id="btnBar"
-            data-chart="bar"
-        >
-            <i class="bi bi-bar-chart-fill"></i>
-            Bar Chart
-        </button>
+            <button type="button" class="chart-btn active" id="btnBar" data-chart="bar">
+                <i class="bi bi-bar-chart-fill"></i>
+                Bar Chart
+            </button>
 
-        <button
-            type="button"
-            class="chart-btn"
-            id="btnPie"
-            data-chart="pie"
-        >
-            <i class="bi bi-pie-chart-fill"></i>
-            Pie Chart
-        </button>
+            <button type="button" class="chart-btn" id="btnPie" data-chart="pie">
+                <i class="bi bi-pie-chart-fill"></i>
+                Pie Chart
+            </button>
 
-        <button
-            type="button"
-            class="chart-btn"
-            id="btnLine"
-            data-chart="line"
-        >
-            <i class="bi bi-graph-up-arrow"></i>
-            Line Chart
+            <button type="button" class="chart-btn" id="btnLine" data-chart="line">
+                <i class="bi bi-graph-up-arrow"></i>
+                Line Chart
+            </button>
+
+        </div>
+
+        <div class="chart-limit-wrapper">
+
+            <select class="form-select chart-limit-select" id="limitData">
+                <option value="5">5 Data</option>
+                <option value="10" selected>10 Data</option>
+                <option value="50">50 Data</option>
+                <option value="all">Semua Data</option>
+            </select>
+
+        </div>
+
+        <button type="button" class="export-pdf-btn" id="exportPdfBtn">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            Export PDF
         </button>
 
     </div>
-
-    <div class="chart-limit-wrapper">
-
-        <select
-            class="form-select chart-limit-select"
-            id="limitData"
-        >
-            <option value="5">5 Data</option>
-            <option value="10" selected>10 Data</option>
-            <option value="50">50 Data</option>
-            <option value="all">Semua Data</option>
-        </select>
-
-    </div>
-
-    <button
-    type="button"
-    class="export-pdf-btn"
-    id="exportPdfBtn"
->
-    <i class="bi bi-file-earmark-pdf-fill"></i>
-    Export PDF
-</button>
-
-</div>
 
     {{-- Grafik --}}
     <div class="chart-card mt-4">
@@ -215,6 +189,29 @@
             <p>
                 Tidak terdapat data untuk pilihan tersebut.
             </p>
+        </div>
+
+        <div class="empty-chart d-none" id="infoNoChart">
+            <i class="bi bi-info-circle" style="color: #123957; font-size: 44px;"></i>
+
+            <h5 id="infoNoChartTitle" class="mt-2">Grafik Tidak Diperlukan</h5>
+
+            <p id="infoNoChartDesc" style="max-width: 540px; margin: 8px auto 16px; color: #667085;">
+                Pada tingkat satu desa, setiap SPPG bernilai 1 unit sehingga grafik perbandingan tidak diperlukan. Total
+                SPPG di desa ini dapat dilihat pada kartu ringkasan di atas.
+            </p>
+
+            <div class="d-flex gap-2 flex-wrap justify-content-center mt-2">
+                <button type="button" class="quick-analysis-btn" data-analysis="kapasitas">
+                    <i class="bi bi-box-seam"></i> Lihat Kapasitas Produksi
+                </button>
+                <button type="button" class="quick-analysis-btn" data-analysis="pegawai">
+                    <i class="bi bi-people"></i> Lihat Jumlah Pegawai
+                </button>
+                <button type="button" class="quick-analysis-btn" data-analysis="peresmian">
+                    <i class="bi bi-calendar-event"></i> Lihat Peresmian
+                </button>
+            </div>
         </div>
 
     </div>
@@ -254,7 +251,7 @@
                     <tr>
                         <th colspan="2">Total</th>
                         <th id="statistikTotal">0</th>
-                    </tr>   
+                    </tr>
                 </tfoot>
 
             </table>
@@ -266,10 +263,13 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
-<script src="{{ asset('js/statistik-export.js') }}"></script>
-<script>window.sppgData = @json($sppg);</script>
-<script src="{{ asset('js/statistik.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        window.sppgData = @json($sppg);
+        window.desaData = @json($desa);
+    </script>
+    <script src="{{ asset('js/statistik-export.js') }}"></script>
+    <script src="{{ asset('js/statistik.js') }}"></script>
 
 @endsection

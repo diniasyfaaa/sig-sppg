@@ -13,8 +13,8 @@
 <div class="text-end mb-3">
 
     <a href="javascript:history.back()" class="back-link">
-    Kembali
-</a>
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
 
@@ -38,6 +38,7 @@
         <thead class="table-light">
             <tr>
                 <th width="60">No</th>
+                <th width="160">Kode Sasaran</th>
                 <th>Nama Sasaran</th>
                 <th width="180">Kapasitas</th>
             </tr>
@@ -50,6 +51,7 @@
             <tr>
 
                 <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->kode ?? '-' }}</td>
                 <td>{{ $item->nama_sasaran }}</td>
                 <td>{{ $item->kapasitas }} Porsi/Hari</td>
             </tr>
@@ -72,11 +74,11 @@
 
             <tr>
 
-                <th colspan="2" class="text-end">
+                <th colspan="3" class="text-end">
                     Total Kapasitas
                 </th>
 
-                <th colspan="2">
+                <th>
                     {{ $sasaran->sum('kapasitas') }} Porsi/Hari
                 </th>
 

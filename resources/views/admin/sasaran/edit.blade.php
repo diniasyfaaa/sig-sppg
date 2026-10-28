@@ -11,8 +11,8 @@
 <div class="text-end mb-3">
 
     <a href="javascript:history.back()" class="back-link">
-    Kembali
-</a>
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
 

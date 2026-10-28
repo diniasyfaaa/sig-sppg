@@ -17,6 +17,8 @@ class Sasaran extends Model
         'kapasitas'
     ];
 
+
+
     // Relasi ke SPPG
     public function sppg()
     {

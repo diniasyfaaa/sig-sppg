@@ -12,8 +12,8 @@
 <div class="text-end mb-0">
 
     <a href="{{ route('sppg.index') }}" class="back-link">
-    Kembali
-</a>
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
     <div class="dashboard-header">
@@ -42,6 +42,7 @@
         <thead class="table-light">
             <tr>
                 <th width="60">No</th>
+                <th width="160">Kode Sasaran</th>
                 <th>Nama Sasaran</th>
                 <th width="180">Kapasitas</th>
                 <th width="180">Aksi</th>
@@ -55,37 +56,37 @@
             <tr>
 
                 <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->kode ?? '-' }}</td>
                 <td>{{ $item->nama_sasaran }}</td>
                 <td>{{ $item->kapasitas }} Porsi/Hari</td>
 
                 <td>
+                    <div class="d-inline-flex align-items-center gap-1">
+                        <a href="{{ route('sasaran.edit', $item->id) }}"
+                            class="btn btn-sm btn-warning text-dark rounded-2 px-2.5 py-1 fw-normal">
+                            Edit
+                        </a>
 
-                <a href="{{ route('sasaran.edit', $item->id) }}"
-                class="btn btn-warning btn-sm">
-                    Edit
-                </a>
-
-                <form action="{{ route('sasaran.destroy', $item->id) }}"
-                    method="POST"
-                    style="display:inline;">
-
-                    @csrf
-
-                    <button
-                        type="submit"
-                        class="btn btn-danger btn-sm"
-                        onclick="return confirm('Yakin ingin menghapus sasaran ini?')">
-                        Hapus
-                    </button>
-                </form>
-            </td>
+                        <form action="{{ route('sasaran.destroy', $item->id) }}"
+                            method="POST"
+                            class="d-inline m-0">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="btn btn-sm btn-danger rounded-2 px-2.5 py-1 fw-normal"
+                                onclick="return confirm('Yakin ingin menghapus sasaran ini?')">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </td>
             </tr>
 
         @empty
 
             <tr>
 
-                <td colspan="4" class="text-center">
+                <td colspan="5" class="text-center">
                     Belum ada data sasaran
                 </td>
 
@@ -99,7 +100,7 @@
 
             <tr>
 
-                <th colspan="2" class="text-end">
+                <th colspan="3" class="text-end">
                     Total Kapasitas
                 </th>
 

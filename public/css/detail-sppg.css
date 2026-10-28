@@ -12,19 +12,36 @@
     margin-bottom:36px;
 }
 
-.back-link{
-    display:inline-block;
-    color:#163250;
-    font-size:16px;
-    font-weight:500;
-    text-decoration:underline;
-    transition:.3s ease;
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    color: #163250;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none !important;
+    background-color: transparent;
+    transition: all 0.2s ease;
 }
 
-.back-link:hover{
-    color:#234a73;
-    text-decoration:underline;
-    transform:translateY(-2px);
+.back-link i {
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+.back-link:hover {
+    color: #0f2d49;
+    background-color: #e2e8f0;
+    transform: translateY(-1px);
+    text-decoration: none !important;
+}
+
+.back-link:hover i {
+    transform: translateX(-3px);
 }
 
 /*JUDUL*/
@@ -324,3 +341,132 @@
         margin-top:25px;
     }
 }
+
+/* ===========================================
+   MENU HARIAN GRID DESIGN (SEPERTI ACUAN)
+=========================================== */
+
+.menu-harian-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+.menu-harian-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #173B63;
+    margin-bottom: 24px;
+}
+
+.menu-siklus-block {
+    margin-bottom: 35px;
+}
+
+.menu-siklus-block:last-child {
+    margin-bottom: 0;
+}
+
+.menu-siklus-header {
+    font-size: 17px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 12px;
+}
+
+.menu-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+}
+
+.menu-grid-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    background: #ffffff;
+    border: 1.5px solid #334155;
+}
+
+.menu-grid-table th {
+    border: 1px solid #334155;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    color: #1e293b;
+    background-color: #ffffff;
+}
+
+.menu-grid-table td {
+    border: 1px solid #334155;
+    padding: 16px 10px;
+    vertical-align: top;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.menu-day-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.menu-img-box {
+    width: 100%;
+    max-width: 140px;
+    height: 140px;
+    margin: 0 auto 12px auto;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.menu-img-box img:hover {
+    transform: scale(1.05);
+}
+
+.menu-img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+    background: #f1f5f9;
+}
+
+.menu-desc-text {
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 10px;
+    text-align: center;
+    word-break: break-word;
+}
+
+.menu-gizi-text {
+    font-size: 11px;
+    line-height: 1.35;
+    color: #64748b;
+    text-align: center;
+    word-break: break-word;
+}

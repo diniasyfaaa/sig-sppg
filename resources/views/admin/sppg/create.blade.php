@@ -8,8 +8,8 @@
 <div class="text-end mb-3">
 
     <a href="javascript:history.back()" class="back-link">
-    Kembali
-</a>
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 
 </div>
 
@@ -48,7 +48,7 @@
         <div class="col-md-6 mb-3">
             <label>Desa</label>
 
-            <select name="desa_id" class="form-control" required>
+            <select name="desa_id" class="form-select" required>
                 <option value="">-- Pilih Desa --</option>
                 @foreach($desa as $d)
                     <option value="{{ $d->id }}">
@@ -81,7 +81,7 @@
         <div class="col-md-6 mb-3">
             <label>Status</label>
 
-            <select name="status" class="form-control">
+            <select name="status" class="form-select">
 
                 <option value="Aktif">Aktif</option>
                 <option value="Tidak Aktif">Tidak Aktif</option>

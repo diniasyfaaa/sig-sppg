@@ -10,269 +10,269 @@
 
 @section('content')
 
-<div class="user-page-container">
-    {{-- Header --}}
-    <div class="dashboard-header">
-        <div class="header-left">
-            <h2>Statistik Monitoring</h2>
-            <p>Analisis Data SPPG Kecamatan Cileunyi</p>
-        </div>
-    </div>
-
-    {{-- Ringkasan --}}
-    <div class="stat-summary">
-
-        <div class="summary-card">
-            <div class="summary-icon">
-                <i class="bi bi-building"></i>
-            </div>
-
-            <div>
-                <span>Total SPPG</span>
-                <strong id="summarySppg">0</strong>
+    <div class="user-page-container">
+        {{-- Header --}}
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h2>Statistik</h2>
+                <p>Analisis Data SPPG Kecamatan Cileunyi</p>
             </div>
         </div>
 
-        <div class="summary-card">
-            <div class="summary-icon">
-                <i class="bi bi-people-fill"></i>
+        {{-- Ringkasan --}}
+        <div class="stat-summary">
+
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+
+                <div>
+                    <span>Total SPPG</span>
+                    <strong id="summarySppg">0</strong>
+                </div>
             </div>
 
-            <div>
-                <span>Total Pegawai</span>
-                <strong id="summaryPegawai">0</strong>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <span>Total Pegawai</span>
+                    <strong id="summaryPegawai">0</strong>
+                </div>
             </div>
+
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="bi bi-box-seam-fill"></i>
+                </div>
+
+                <div>
+                    <span>Total Kapasitas</span>
+                    <strong id="summaryKapasitas">0</strong>
+                </div>
+            </div>
+
         </div>
 
-        <div class="summary-card">
-            <div class="summary-icon">
-                <i class="bi bi-box-seam-fill"></i>
-            </div>
+        {{-- Filter --}}
+        <div class="filter-card">
+            <div class="row g-3">
 
-            <div>
-                <span>Total Kapasitas</span>
-                <strong id="summaryKapasitas">0</strong>
-            </div>
-        </div>
+                {{-- Desa --}}
+                <div class="col-lg-4 col-md-6">
+                    <label for="desa" class="form-label">
+                        Desa
+                    </label>
 
-    </div>
+                    <select class="form-select" id="desa">
+                        <option value="all">Semua Desa</option>
 
-    {{-- Filter --}}
-    <div class="filter-card">
-        <div class="row g-3">
+                        @foreach($desa as $item)
+                            <option value="{{ $item->id }}" {{ request('desa') == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama_desa }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            {{-- Desa --}}
-            <div class="col-lg-4 col-md-6">
-                <label for="desa" class="form-label">
-                    Desa
-                </label>
+                {{-- Analisis --}}
+                <div class="col-lg-4 col-md-6">
+                    <label for="analisis" class="form-label">
+                        Analisis
+                    </label>
 
-                <select class="form-select" id="desa">
-                    <option value="all">Semua Desa</option>
+                    <select class="form-select" id="analisis">
 
-                    @foreach($desa as $item)
-                        <option value="{{ $item->id }}">
-                            {{ $item->nama_desa }}
+                        <option value="jumlah_sppg" {{ request('analisis') === 'jumlah_sppg' ? 'selected' : '' }}>
+                            Jumlah SPPG
                         </option>
-                    @endforeach
-                </select>
+
+                        <option value="peresmian" {{ request('analisis') === 'peresmian' ? 'selected' : '' }}>
+                            Peresmian
+                        </option>
+
+                        <option value="kapasitas" {{ request('analisis') === 'kapasitas' ? 'selected' : '' }}>
+                            Kapasitas Produksi
+                        </option>
+
+                        <option value="pegawai" {{ request('analisis') === 'pegawai' ? 'selected' : '' }}>
+                            Jumlah Pegawai
+                        </option>
+
+                    </select>
+                </div>
+
+                {{-- Urutan data --}}
+                <div class="col-lg-4 col-md-6">
+                    <label for="urutanData" class="form-label">
+                        Urutan
+                    </label>
+
+                    <select class="form-select" id="urutanData">
+                        {{-- Opsi akan diatur otomatis oleh JavaScript --}}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        {{-- Toolbar Grafik --}}
+        <div class="chart-toolbar mt-4" id="chartToolbar">
+
+            <div class="chart-type">
+
+                <button type="button" class="chart-btn active" id="btnBar" data-chart="bar">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Bar Chart
+                </button>
+
+                <button type="button" class="chart-btn" id="btnPie" data-chart="pie">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    Pie Chart
+                </button>
+
+                <button type="button" class="chart-btn" id="btnLine" data-chart="line">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Line Chart
+                </button>
+
             </div>
 
-            {{-- Analisis --}}
-            <div class="col-lg-4 col-md-6">
-                <label for="analisis" class="form-label">
-                    Analisis
-                </label>
+            <div class="chart-limit-wrapper">
 
-                <select class="form-select" id="analisis">
-
-                    <option value="jumlah_sppg"
-                        {{ request('analisis') === 'jumlah_sppg' ? 'selected' : '' }}>
-                        Jumlah SPPG
-                    </option>
-
-                    <option value="peresmian"
-                        {{ request('analisis') === 'peresmian' ? 'selected' : '' }}>
-                        Peresmian
-                    </option>
-
-                    <option value="kapasitas"
-                        {{ request('analisis') === 'kapasitas' ? 'selected' : '' }}>
-                        Kapasitas Produksi
-                    </option>
-
-                    <option value="pegawai"
-                        {{ request('analisis') === 'pegawai' ? 'selected' : '' }}>
-                        Jumlah Pegawai
-                    </option>
-
+                <select class="form-select chart-limit-select" id="limitData">
+                    <option value="5">5 Data</option>
+                    <option value="10" selected>10 Data</option>
+                    <option value="50">50 Data</option>
+                    <option value="all">Semua Data</option>
                 </select>
+
             </div>
 
-            {{-- Urutan data --}}
-            <div class="col-lg-4 col-md-6">
-                <label for="urutanData" class="form-label">
-                    Urutan
-                </label>
-
-                <select class="form-select" id="urutanData">
-                    {{-- Opsi akan diatur otomatis oleh JavaScript --}}
-                </select>
-            </div>
+            <button type="button" class="export-pdf-btn" id="exportPdfBtn">
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+                Export PDF
+            </button>
 
         </div>
-    </div>
 
-{{-- Toolbar Grafik --}}
-<div class="chart-toolbar mt-4">
+        {{-- Grafik --}}
+        <div class="chart-card mt-4">
 
-    <div class="chart-type">
+            <div class="chart-card-header">
 
-        <button
-            type="button"
-            class="chart-btn active"
-            id="btnBar"
-            data-chart="bar"
-        >
-            <i class="bi bi-bar-chart-fill"></i>
-            Bar Chart
-        </button>
+                <div>
+                    <h4 id="judulGrafik">
+                        Jumlah SPPG pada Setiap Desa
+                    </h4>
 
-        <button
-            type="button"
-            class="chart-btn"
-            id="btnPie"
-            data-chart="pie"
-        >
-            <i class="bi bi-pie-chart-fill"></i>
-            Pie Chart
-        </button>
+                    <p id="subjudulGrafik">
+                        Perbandingan jumlah SPPG berdasarkan desa
+                    </p>
+                </div>
 
-        <button
-            type="button"
-            class="chart-btn"
-            id="btnLine"
-            data-chart="line"
-        >
-            <i class="bi bi-graph-up-arrow"></i>
-            Line Chart
-        </button>
+                <span class="chart-badge" id="chartBadge">
+                    Semua Desa
+                </span>
 
-    </div>
+            </div>
 
-    <div class="chart-limit-wrapper">
+            <div class="chart-container">
+                <canvas id="chartUtama"></canvas>
+            </div>
 
-        <select
-            class="form-select chart-limit-select"
-            id="limitData"
-        >
-            <option value="5">5 Data</option>
-            <option value="10" selected>10 Data</option>
-            <option value="50">50 Data</option>
-            <option value="all">Semua Data</option>
-        </select>
+            <div class="empty-chart d-none" id="emptyChart">
+                <i class="bi bi-bar-chart"></i>
 
-    </div>
+                <h5>Data belum tersedia</h5>
 
-    <button
-    type="button"
-    class="export-pdf-btn"
-    id="exportPdfBtn"
->
-    <i class="bi bi-file-earmark-pdf-fill"></i>
-    Export PDF
-</button>
-
-</div>
-
-    {{-- Grafik --}}
-    <div class="chart-card mt-4">
-
-        <div class="chart-card-header">
-
-            <div>
-                <h4 id="judulGrafik">
-                    Jumlah SPPG pada Setiap Desa
-                </h4>
-
-                <p id="subjudulGrafik">
-                    Perbandingan jumlah SPPG berdasarkan desa
+                <p>
+                    Tidak terdapat data untuk pilihan tersebut.
                 </p>
             </div>
 
-            <span class="chart-badge" id="chartBadge">
-                Semua Desa
-            </span>
+            <div class="empty-chart d-none" id="infoNoChart">
+                <i class="bi bi-info-circle" style="color: #123957; font-size: 44px;"></i>
 
-        </div>
+                <h5 id="infoNoChartTitle" class="mt-2">Grafik Tidak Diperlukan</h5>
 
-        <div class="chart-container">
-            <canvas id="chartUtama"></canvas>
-        </div>
-
-        <div class="empty-chart d-none" id="emptyChart">
-            <i class="bi bi-bar-chart"></i>
-
-            <h5>Data belum tersedia</h5>
-
-            <p>
-                Tidak terdapat data untuk pilihan tersebut.
-            </p>
-        </div>
-
-    </div>
-
-    {{-- Tabel --}}
-    <div class="table-card mt-4">
-
-        <div class="table-card-header">
-
-            <div>
-                <h4>Data Statistik</h4>
-
-                <p id="tableDescription">
-                    Rincian data yang ditampilkan pada grafik
+                <p id="infoNoChartDesc" style="max-width: 540px; margin: 8px auto 16px; color: #667085;">
+                    Pada tingkat satu desa, setiap SPPG bernilai 1 unit sehingga grafik perbandingan tidak diperlukan. Total
+                    SPPG di desa ini dapat dilihat pada kartu ringkasan di atas.
                 </p>
+
+                <div class="d-flex gap-2 flex-wrap justify-content-center mt-2">
+                    <button type="button" class="quick-analysis-btn" data-analysis="kapasitas">
+                        <i class="bi bi-box-seam"></i> Lihat Kapasitas Produksi
+                    </button>
+                    <button type="button" class="quick-analysis-btn" data-analysis="pegawai">
+                        <i class="bi bi-people"></i> Lihat Jumlah Pegawai
+                    </button>
+                    <button type="button" class="quick-analysis-btn" data-analysis="peresmian">
+                        <i class="bi bi-calendar-event"></i> Lihat Peresmian
+                    </button>
+                </div>
             </div>
 
         </div>
 
-        <div class="table-responsive">
+        {{-- Tabel --}}
+        <div class="table-card mt-4">
 
-            <table class="table statistic-table">
+            <div class="table-card-header">
 
-                <thead>
-                    <tr>
-                        <th width="70">No</th>
-                        <th id="tableNameHeading">Nama Desa</th>
-                        <th id="tableValueHeading">Nilai</th>
-                    </tr>
-                </thead>
+                <div>
+                    <h4>Data Statistik</h4>
 
-                <tbody id="statistikTableBody">
-                    {{-- Diisi JavaScript --}}
-                </tbody>
+                    <p id="tableDescription">
+                        Rincian data yang ditampilkan pada grafik
+                    </p>
+                </div>
 
-                <tfoot>
-                    <tr>
-                        <th colspan="2">Total</th>
-                        <th id="statistikTotal">0</th>
-                    </tr>   
-                </tfoot>
+            </div>
 
-            </table>
+            <div class="table-responsive">
+
+                <table class="table statistic-table">
+
+                    <thead>
+                        <tr>
+                            <th width="70">No</th>
+                            <th id="tableNameHeading">Nama Desa</th>
+                            <th id="tableValueHeading">Nilai</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="statistikTableBody">
+                        {{-- Diisi JavaScript --}}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Total</th>
+                            <th id="statistikTotal">0</th>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+            </div>
 
         </div>
-
     </div>
-</div>
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
-<script src="{{ asset('js/statistik-export.js') }}"></script>
-<script>window.sppgData = @json($sppg);</script>
-<script src="{{ asset('js/statistik.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        window.sppgData = @json($sppg);
+        window.desaData = @json($desa);
+    </script>
+    <script src="{{ asset('js/statistik-export.js') }}"></script>
+    <script src="{{ asset('js/statistik.js') }}"></script>
 
 @endsection
